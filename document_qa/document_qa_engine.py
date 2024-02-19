@@ -2,7 +2,7 @@ import copy
 import os
 from pathlib import Path
 from typing import Union, Any
-
+import logging
 import tiktoken
 from grobid_client.grobid_client import GrobidClient
 from langchain.chains import create_extraction_chain
@@ -141,12 +141,13 @@ class DocumentQAEngine:
         """
 
         embeddings_directories = [f for f in os.scandir(embeddings_root_path) if f.is_dir()]
-
+        logging.debug(f"Found {embeddings_directories}")
         if len(embeddings_directories) == 0:
             print("No available embeddings")
             return
 
         for embedding_document_dir in embeddings_directories:
+            logging.debug(f"Loading embeddings for {embedding_document_dir}")
             self.embeddings_dict[embedding_document_dir.name] = Chroma(persist_directory=embedding_document_dir.path,
                                                                        embedding_function=self.embedding_function)
 

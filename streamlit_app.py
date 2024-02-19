@@ -2,7 +2,7 @@ import os
 import re
 from hashlib import blake2b
 from tempfile import NamedTemporaryFile
-
+import logging
 import dotenv
 from grobid_quantities.quantities import QuantitiesAPI
 from langchain.llms.huggingface_hub import HuggingFaceHub
@@ -23,7 +23,7 @@ import os
 # 设置环境变量
 os.environ['GROBID_QUANTITIES_URL'] = 'https://duanmuwx-grobid-quantities.hf.space'
 os.environ['GROBID_URL'] = 'https://duanmuwx-grobid.hf.space'
-os.environ['GROBID_MATERIALS_URL'] = 'https://duanmuwx/duanmuwx-grobid-superconductors.hf.space'
+os.environ['GROBID_MATERIALS_URL'] = 'https://duanmuwx-grobid-superconductors.hf.space'
 os.environ['HUGGINGFACEHUB_API_TOKEN'] = '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'
 
 OPENAI_MODELS = ['gpt-3.5-turbo',
@@ -165,10 +165,11 @@ def init_qa(model, api_key=None):
     elif model in OPEN_MODELS:
         chat = HuggingFaceHub(
             repo_id=OPEN_MODELS[model],
-            model_kwargs={"temperature": 0.01, "max_length": 4096, "max_new_tokens": 2048}
+            model_kwargs={"temperature": 0.01, "max_length": 4096, "max_new_tokens": 2048},
+            huggingfacehub_api_token='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'
         )
         embeddings = HuggingFaceEmbeddings(
-            model_name="all-MiniLM-L6-v2")
+            model_name="all-MiniLM-L6-v2", huggingfacehub_api_token='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')
         st.session_state['memory'] = ConversationBufferWindowMemory(k=4) if model not in DISABLE_MEMORY else None
     else:
         st.error("The model was not loaded properly. Try reloading. ")
