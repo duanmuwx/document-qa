@@ -18,6 +18,13 @@ from langchain.embeddings import OpenAIEmbeddings, HuggingFaceEmbeddings
 from document_qa.document_qa_engine import DocumentQAEngine
 from document_qa.grobid_processors import GrobidAggregationProcessor, decorate_text_with_annotations
 from grobid_client_generic import GrobidClientGeneric
+import os
+
+# 设置环境变量
+os.environ['GROBID_QUANTITIES_URL'] = 'https://duanmuwx-grobid-quantities.hf.space'
+os.environ['GROBID_URL'] = 'https://duanmuwx-grobid.hf.space'
+os.environ['GROBID_MATERIALS_URL'] = 'https://duanmuwx/duanmuwx-grobid-superconductors.hf.space'
+os.environ['HUGGINGFACEHUB_API_TOKEN'] = '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'
 
 OPENAI_MODELS = ['gpt-3.5-turbo',
                  "gpt-4",
