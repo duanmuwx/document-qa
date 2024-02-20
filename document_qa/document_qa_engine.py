@@ -365,6 +365,7 @@ class DocumentQAEngine:
                                                     embedding=self.embedding_function, persist_directory=data_path)
         self.vector_db_document.persist()
         logging.debug('################ Saved vector ###############')
+        return True
     # def create_embeddings(self, pdfs_dir_path: Path, chunk_size=500, perc_overlap=0.1, include_biblio=False):
     #     input_files = []
     #     for root, dirs, files in os.walk(pdfs_dir_path, followlinks=False):
