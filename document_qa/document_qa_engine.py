@@ -229,6 +229,7 @@ class DocumentQAEngine:
         return parsed_output
 
     def _run_query(self, doc_id, query, context_size=4):
+        logging.debug('Query: {}'.format(query))
         relevant_documents = self._get_context(doc_id, query, context_size)
         relevant_document_coordinates = [doc.metadata['coordinates'].split(";") if 'coordinates' in doc.metadata else []
                                          for doc in

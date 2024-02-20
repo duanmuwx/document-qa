@@ -406,8 +406,7 @@ def generate_color_gradient(num_elements):
 
     return color_gradient
 
-
-print(f'####################{st.session_state.loaded_embeddings},{question}##############')
+logging.debug(f'Loading model...{st.session_state.loaded_embeddings},{question}')
 with right_column:
     if st.session_state.loaded_embeddings and question and len(question) > 0 and st.session_state.doc_id:
         for message in st.session_state.messages:
