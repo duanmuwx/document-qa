@@ -426,7 +426,7 @@ with right_column:
     #     """,
     #     unsafe_allow_html=True,
     # )
-
+    print(f'####################{st.session_state.loaded_embeddings},{question}##############')
     if st.session_state.loaded_embeddings and question and len(question) > 0 and st.session_state.doc_id:
         for message in st.session_state.messages:
             with st.chat_message(message["role"]):
