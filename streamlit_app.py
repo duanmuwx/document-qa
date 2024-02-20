@@ -380,10 +380,10 @@ if uploaded_file and not st.session_state.loaded_embeddings:
 
     with right_column:
         with st.spinner('Reading file, calling Grobid, and creating memory embeddings...'):
-            binary = uploaded_file.getvalue()
-            tmp_file = NamedTemporaryFile()
-            tmp_file.write(bytearray(binary))
-            st.session_state['binary'] = binary
+            # binary = uploaded_file.getvalue()
+            # tmp_file = NamedTemporaryFile()
+            # tmp_file.write(bytearray(binary))
+            # st.session_state['binary'] = binary
 
             st.session_state['doc_id'] = hash = st.session_state['rqa'][model].process_uploaded_files(uploaded_file,
                                                                                                       chunk_size=chunk_size,
