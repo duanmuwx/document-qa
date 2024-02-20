@@ -342,7 +342,7 @@ class DocumentQAEngine:
         for uploaded_file in tqdm(uploaded_files, total=len(uploaded_files), unit='document',
                                   desc="Processing uploaded files"):
             # 这里应该有代码将 uploaded_file 保存到临时文件路径
-            temp_file_path = os.path.join("temp_dir", uploaded_file.name)
+            temp_file_path = os.path.join(uploaded_file.name)
             with open(temp_file_path, "wb") as f:
                 f.write(uploaded_file.getbuffer())
 
