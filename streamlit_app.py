@@ -308,8 +308,7 @@ with right_column:
     )
 
 question = st.chat_input(
-    "Ask something about the article",
-    placeholder="Can you give me a short summary?",
+    "Ask something about the article"
 )
 
 with st.sidebar:
