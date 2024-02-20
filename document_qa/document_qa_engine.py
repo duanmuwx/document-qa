@@ -170,10 +170,10 @@ class DocumentQAEngine:
         return self.embeddings_map_from_md5[md5]
 
     def query_document(self, query: str, doc_id, output_parser=None, context_size=4, extraction_schema=None,
-                       verbose=False) -> (
+                       verbose=True) -> (
             Any, str):
         # self.load_embeddings(self.embeddings_root_path)
-
+        logging.info('Querying document')
         if verbose:
             print(query)
 
