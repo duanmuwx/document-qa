@@ -9,7 +9,6 @@ from langchain.llms.huggingface_hub import HuggingFaceHub
 from langchain.memory import ConversationBufferWindowMemory
 from streamlit_pdf_viewer import pdf_viewer
 
-
 import streamlit as st
 from langchain.chat_models import ChatOpenAI
 from langchain.embeddings import OpenAIEmbeddings, HuggingFaceEmbeddings
@@ -303,7 +302,7 @@ with right_column:
 
     uploaded_file = st.file_uploader(
         "Upload an article",
-        type=("pdf", "txt"),
+        type=("pdf", "txt"), accept_multiple_files=True,
         on_change=new_file,
         disabled=st.session_state['model'] is not None and st.session_state['model'] not in
                  st.session_state['api_keys'],
@@ -386,7 +385,7 @@ if uploaded_file and not st.session_state.loaded_embeddings:
             tmp_file.write(bytearray(binary))
             st.session_state['binary'] = binary
 
-            st.session_state['doc_id'] = hash = st.session_state['rqa'][model].create_memory_embeddings(tmp_file.name,
+            st.session_state['doc_id'] = hash = st.session_state['rqa'][model].create_embeddings(tmp_file.name,
                                                                                                         chunk_size=chunk_size,
                                                                                                         perc_overlap=0.1)
             st.session_state['loaded_embeddings'] = True
