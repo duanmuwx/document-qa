@@ -136,7 +136,7 @@ css_disable_scrolling_container = '''
 def new_file():
     logging.info('new_file called')
     st.session_state['loaded_embeddings'] = None
-    st.session_state['doc_id'] = True
+    st.session_state['doc_id'] = None
     st.session_state['uploaded'] = True
     if st.session_state['memory']:
         st.session_state['memory'].clear()
@@ -303,12 +303,15 @@ with right_column:
         "Upload an article",
         type=("pdf", "txt"), accept_multiple_files=True,
         on_change=new_file,
-        disabled=st.session_state['model'] is not None and st.session_state['model'] not in st.session_state['api_keys'],
+        disabled=st.session_state['model'] is not None and st.session_state['model'] not in
+                 st.session_state['api_keys'],
         help="The full-text is extracted using Grobid."
     )
 
 question = st.chat_input(
-    "Ask something about the article"
+    "Ask something about the article",
+    # placeholder="Can you give me a short summary?",
+    disabled=not uploaded_file
 )
 
 with st.sidebar:
@@ -376,9 +379,9 @@ if uploaded_file and not st.session_state.loaded_embeddings:
 
     with right_column:
         with st.spinner('Reading file, calling Grobid, and creating memory embeddings...'):
-            st.session_state['rqa'][model].process_uploaded_files(uploaded_file,
-                                                                  chunk_size=chunk_size,
-                                                                  perc_overlap=0.1)
+            st.session_state['doc_id'] = hash = st.session_state['rqa'][model].process_uploaded_files(uploaded_file,
+                                                                                                      chunk_size=chunk_size,
+                                                                                                      perc_overlap=0.1)
             st.session_state['loaded_embeddings'] = True
             st.session_state.messages = []
 
@@ -423,8 +426,8 @@ with right_column:
     #     """,
     #     unsafe_allow_html=True,
     # )
-    print(f'###############{question}')
-    if st.session_state.loaded_embeddings and question and len(question) > 0:
+
+    if st.session_state.loaded_embeddings and question and len(question) > 0 and st.session_state.doc_id:
         for message in st.session_state.messages:
             with st.chat_message(message["role"]):
                 if message['mode'] == "LLM":
@@ -441,13 +444,11 @@ with right_column:
 
         text_response = None
         if mode == "Embeddings":
-            logging.debug('Generating LLM response...')
-            with st.spinner("Generating Embeddings response..."):
-
+            with st.spinner("Generating LLM response..."):
+                logging.debug('Generating LLM response...')
                 text_response = st.session_state['rqa'][model].query_storage(question, st.session_state.doc_id,
                                                                              context_size=context_size)
         elif mode == "LLM":
-            logging.debug('Generating LLM response...')
             with st.spinner("Generating response..."):
                 _, text_response, coordinates = st.session_state['rqa'][model].query_document(question,
                                                                                               st.session_state.doc_id,
