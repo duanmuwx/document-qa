@@ -167,11 +167,10 @@ def init_qa(model, api_key=None):
     elif model in OPEN_MODELS:
         chat = HuggingFaceHub(
             repo_id=OPEN_MODELS[model],
-            model_kwargs={"temperature": 0.01, "max_length": 4096, "max_new_tokens": 2048},
-            huggingfacehub_api_token='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'
+            model_kwargs={"temperature": 0.01, "max_length": 4096, "max_new_tokens": 2048}
         )
         embeddings = HuggingFaceEmbeddings(
-            model_name="all-MiniLM-L6-v2", huggingfacehub_api_token='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')
+            model_name="all-MiniLM-L6-v2")
         st.session_state['memory'] = ConversationBufferWindowMemory(k=4) if model not in DISABLE_MEMORY else None
     else:
         st.error("The model was not loaded properly. Try reloading. ")
