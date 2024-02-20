@@ -313,7 +313,7 @@ question = st.chat_input(
     # placeholder="Can you give me a short summary?",
     disabled=not uploaded_file
 )
-
+logging.debug('##############Question###########: %s', question)
 with st.sidebar:
     st.header("Settings")
     mode = st.radio(
@@ -407,26 +407,8 @@ def generate_color_gradient(num_elements):
     return color_gradient
 
 
+print(f'####################{st.session_state.loaded_embeddings},{question}##############')
 with right_column:
-    # css = '''
-    #     <style>
-    #         [data-testid="column"] {
-    #             overflow: auto;
-    #             height: 70vh;
-    #         }
-    #     </style>
-    #     '''
-    # st.markdown(css, unsafe_allow_html=True)
-
-    # st.markdown(
-    #     """
-    #     <script>
-    #     document.querySelectorAll('[data-testid="column"]').scrollIntoView({behavior: "smooth"});
-    #     </script>
-    #     """,
-    #     unsafe_allow_html=True,
-    # )
-    print(f'####################{st.session_state.loaded_embeddings},{question}##############')
     if st.session_state.loaded_embeddings and question and len(question) > 0 and st.session_state.doc_id:
         for message in st.session_state.messages:
             with st.chat_message(message["role"]):
