@@ -303,15 +303,13 @@ with right_column:
         "Upload an article",
         type=("pdf", "txt"), accept_multiple_files=True,
         on_change=new_file,
-        disabled=st.session_state['model'] is not None and st.session_state['model'] not in
-                 st.session_state['api_keys'],
+        disabled=st.session_state['model'] is not None and st.session_state['model'] not in st.session_state['api_keys'],
         help="The full-text is extracted using Grobid."
     )
 
 question = st.chat_input(
     "Ask something about the article",
-    # placeholder="Can you give me a short summary?",
-    disabled=not uploaded_file
+    placeholder="Can you give me a short summary?",
 )
 
 with st.sidebar:
@@ -426,7 +424,7 @@ with right_column:
     #     """,
     #     unsafe_allow_html=True,
     # )
-
+    print(f'###############{question}')
     if st.session_state.loaded_embeddings and question and len(question) > 0:
         for message in st.session_state.messages:
             with st.chat_message(message["role"]):
