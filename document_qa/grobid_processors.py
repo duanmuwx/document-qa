@@ -132,6 +132,7 @@ class GrobidProcessor(BaseProcessor):
         self.grobid_client = grobid_client
 
     def process_structure(self, input_path, coordinates=False):
+        print(input_path)
         pdf_file, status, text = self.grobid_client.process_pdf("processFulltextDocument",
                                                                 input_path,
                                                                 consolidate_header=True,

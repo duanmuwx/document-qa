@@ -9,7 +9,6 @@ from langchain.llms.huggingface_hub import HuggingFaceHub
 from langchain.memory import ConversationBufferWindowMemory
 from streamlit_pdf_viewer import pdf_viewer
 
-dotenv.load_dotenv(override=True)
 
 import streamlit as st
 from langchain.chat_models import ChatOpenAI
@@ -25,7 +24,10 @@ os.environ['GROBID_QUANTITIES_URL'] = 'https://duanmuwx-grobid-quantities.hf.spa
 os.environ['GROBID_URL'] = 'https://duanmuwx-grobid.hf.space'
 os.environ['GROBID_MATERIALS_URL'] = 'https://duanmuwx-grobid-superconductors.hf.space'
 os.environ['HUGGINGFACEHUB_API_TOKEN'] = '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'
+os.environ['OPENAI_API_KEY'] = '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'
+os.environ['DEFAULT_MODEL'] = 'gpt-3.5-turbo'
 
+dotenv.load_dotenv(override=True)
 OPENAI_MODELS = ['gpt-3.5-turbo',
                  "gpt-4",
                  "gpt-4-1106-preview"]
@@ -133,6 +135,7 @@ css_disable_scrolling_container = '''
 
 
 def new_file():
+    logging.info('new_file called')
     st.session_state['loaded_embeddings'] = None
     st.session_state['doc_id'] = None
     st.session_state['uploaded'] = True
