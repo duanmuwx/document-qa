@@ -2,6 +2,7 @@ import copy
 import os
 from pathlib import Path
 from typing import Union, Any
+from tempfile import NamedTemporaryFile
 import logging
 import tiktoken
 from grobid_client.grobid_client import GrobidClient
@@ -341,20 +342,19 @@ class DocumentQAEngine:
         # 假设 uploaded_files 是一个包含上传文件对象的列表
         for uploaded_file in tqdm(uploaded_files, total=len(uploaded_files), unit='document',
                                   desc="Processing uploaded files"):
-            logging.debug('#############Processing uploaded##########')
+            logging.debug('Processing uploaded##########')
             # 这里应该有代码将 uploaded_file 保存到临时文件路径
-            temp_file_path = os.path.join(uploaded_file.name)
-            with open(temp_file_path, "wb") as f:
-                f.write(uploaded_file.getbuffer())
+            binary = uploaded_file.getvalue()
+            os.makedirs('tmp_path', exist_ok=True)
+            tmp_file = NamedTemporaryFile(dir='tmp_path')
+            tmp_file.write(bytearray(binary))
 
             # 对每个文件进行处理，累积文本和元数据
-            texts, metadata, ids = self.get_text_from_document(temp_file_path, chunk_size=chunk_size,
+            texts, metadata, ids = self.get_text_from_document(tmp_file.name, chunk_size=chunk_size,
                                                                perc_overlap=perc_overlap)
             all_texts.extend(texts)
             all_metadata.extend(metadata)
 
-            # 记得清理临时文件
-            os.remove(temp_file_path)
 
         # 在所有文件处理完成后，创建一个共同的 vector_db_document
         data_path = "data_path"
@@ -364,6 +364,7 @@ class DocumentQAEngine:
                                                     embedding=self.embedding_function, persist_directory=data_path)
         self.vector_db_document.persist()
         logging.debug('################ Saved vector ###############')
+
     # def create_embeddings(self, pdfs_dir_path: Path, chunk_size=500, perc_overlap=0.1, include_biblio=False):
     #     input_files = []
     #     for root, dirs, files in os.walk(pdfs_dir_path, followlinks=False):
