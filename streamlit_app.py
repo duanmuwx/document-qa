@@ -23,8 +23,7 @@ os.environ['GROBID_QUANTITIES_URL'] = 'https://duanmuwx-grobid-quantities.hf.spa
 os.environ['GROBID_URL'] = 'https://duanmuwx-grobid.hf.space'
 os.environ['GROBID_MATERIALS_URL'] = 'https://duanmuwx-grobid-superconductors.hf.space'
 os.environ['HUGGINGFACEHUB_API_TOKEN'] = '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'
-os.environ['OPENAI_API_KEY'] = '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'
-os.environ['DEFAULT_MODEL'] = 'gpt-3.5-turbo'
+os.environ['DEFAULT_MODEL'] = 'zephyr-7b-beta'
 
 dotenv.load_dotenv(override=True)
 OPENAI_MODELS = ['gpt-3.5-turbo',
