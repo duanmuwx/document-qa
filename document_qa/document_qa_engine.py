@@ -107,14 +107,15 @@ class DocumentQAEngine:
                  qa_chain_type="stuff",
                  embeddings_root_path=None,
                  grobid_url=None,
-                 memory=None
+                 memory=None,
+                 vector_db_document=None
                  ):
         self.embedding_function = embedding_function
         self.llm = llm
         self.memory = memory
         self.chain = load_qa_chain(llm, chain_type=qa_chain_type)
         self.text_merger = TextMerger()
-
+        self.vector_db_document = vector_db_document
         if embeddings_root_path is not None:
             self.embeddings_root_path = embeddings_root_path
             if not os.path.exists(embeddings_root_path):
@@ -239,7 +240,7 @@ class DocumentQAEngine:
         return response, relevant_document_coordinates
 
     def _get_context(self, doc_id, query, context_size=4):
-        db = self.embeddings_dict[doc_id]
+        db = self.vector_db_document
         retriever = db.as_retriever(search_kwargs={"k": context_size})
         relevant_documents = retriever.get_relevant_documents(query)
         if self.memory and len(self.memory.buffer_as_messages) > 0:
@@ -252,12 +253,12 @@ class DocumentQAEngine:
 
     def get_all_context_by_document(self, doc_id):
         """Return the full context from the document"""
-        db = self.embeddings_dict[doc_id]
+        db = self.vector_db_document
         docs = db.get()
         return docs['documents']
 
     def _get_context_multiquery(self, doc_id, query, context_size=4):
-        db = self.embeddings_dict[doc_id].as_retriever(search_kwargs={"k": context_size})
+        db = self.vector_db_document.as_retriever(search_kwargs={"k": context_size})
         multi_query_retriever = MultiQueryRetriever.from_llm(retriever=db, llm=self.llm)
         relevant_documents = multi_query_retriever.get_relevant_documents(query)
         return relevant_documents
@@ -357,11 +358,11 @@ class DocumentQAEngine:
                 include=include)
             filename = metadata[0]['filename']
 
-            vector_db_document = Chroma.from_texts(texts,
-                                                   metadatas=metadata,
-                                                   embedding=self.embedding_function,
-                                                   persist_directory=data_path)
-            vector_db_document.persist()
+            self.vector_db_document = Chroma.from_texts(texts,
+                                                        metadatas=metadata,
+                                                        embedding=self.embedding_function,
+                                                        persist_directory=data_path)
+            self.vector_db_document.persist()
 
             with open(os.path.join(data_path, filename + ".storage_filename"), 'w') as fo:
                 fo.write("")
