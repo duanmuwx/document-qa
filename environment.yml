@@ -1,0 +1,29 @@
+name: document_qa
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9  # Specify the Python version you want
+  - lxml
+  - beautifulsoup4
+  - watchdog  
+  - dateparser
+  - pytest=7.4.3
+  - pyyaml=6.0.1
+  - tqdm=4.66.1
+  - pip:
+    - grobid-quantities-client==0.4.0
+    - grobid-client-python==0.0.7
+    - grobid_tei_xml==0.1.3
+    - python-dotenv
+    - streamlit==1.29.0
+    - chromadb==0.4.19
+    - tiktoken==0.4.0
+    - openai==0.27.7
+    - langchain==0.0.350
+    - langchain-core==0.1.0
+    - typing-inspect==0.9.0
+    - typing_extensions==4.8.0
+    - pydantic==2.4.2
+    - sentence_transformers==2.2.2
+    - streamlit-pdf-viewer  # Assuming this is a pip package as it's not a common Conda package
